@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -9,7 +9,7 @@ namespace fdrcontest1.Data
 
       //  private DataTable dataTable = new DataTable();
 
-        private string ConnString = "Server=tcp:fdrcontest.database.windows.net,1433;Initial Catalog=FDRContestDB;Persist Security Info=False;User ID=surajadmin;Password='Passw0rd!';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private string ConnString = "Server=tcp:<db>.database.windows.net,1433;Initial Catalog=FDRContestDB;Persist Security Info=False;User ID=<user>;Password='<password>';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public Task<FdrCase[]> GetEngineerDataAsync(string email)
         {
