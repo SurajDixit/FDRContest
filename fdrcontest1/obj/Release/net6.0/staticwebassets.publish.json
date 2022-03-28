@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "Hash": "O4a3ZOt3H088S+hQfPqN3ALOJFiMLmBwEfi95dYjWGA=",
+  "Source": "fdrcontest1",
+  "BasePath": "_content/fdrcontest1",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "fdrcontest1\\wwwroot",
+      "Source": "fdrcontest1",
+      "ContentRoot": "C:\\Users\\sudixi\\source\\repos\\fdrcontest1\\fdrcontest1\\wwwroot\\",
+      "BasePath": "_content/fdrcontest1",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\sudixi\\.nuget\\packages\\mudblazor\\6.0.6\\staticwebassets\\MudBlazor.min.css",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\sudixi\\.nuget\\packages\\mudblazor\\6.0.6\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\sudixi\\.nuget\\packages\\mudblazor\\6.0.6\\staticwebassets\\MudBlazor.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\sudixi\\.nuget\\packages\\mudblazor\\6.0.6\\staticwebassets\\MudBlazor.min.js",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\sudixi\\.nuget\\packages\\mudblazor\\6.0.6\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\sudixi\\.nuget\\packages\\mudblazor\\6.0.6\\staticwebassets\\MudBlazor.min.js"
+    },
+    {
+      "Identity": "C:\\Users\\sudixi\\source\\repos\\fdrcontest1\\fdrcontest1\\wwwroot\\favicon.ico",
+      "SourceId": "fdrcontest1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sudixi\\source\\repos\\fdrcontest1\\fdrcontest1\\wwwroot\\",
+      "BasePath": "_content/fdrcontest1",
+      "RelativePath": "favicon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\sudixi\\source\\repos\\fdrcontest1\\fdrcontest1\\wwwroot\\images\\suraj.jpg",
+      "SourceId": "fdrcontest1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sudixi\\source\\repos\\fdrcontest1\\fdrcontest1\\wwwroot\\",
+      "BasePath": "_content/fdrcontest1",
+      "RelativePath": "images/suraj.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\suraj.jpg"
+    }
+  ]
+}

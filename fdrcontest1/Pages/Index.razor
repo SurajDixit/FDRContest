@@ -1,0 +1,166 @@
+﻿@page "/"
+@using fdrcontest1.Data
+@inject WeatherForecastService ForecastService
+@inject FdrCaseService fdrcaseservice
+
+<PageTitle>Leaderboard</PageTitle>
+
+<MudAlert Icon="@Icons.Filled.Leaderboard" ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Normal">Leaderboard</MudAlert>
+@*Variant="Variant.Filled"*@
+<br />
+
+@*<MudGrid Spacing="@spacing" Justify="Justify.Center">
+    <MudItem>
+        <MudCard>
+            <MudCardMedia Image="images/suraj.jpg" Height="200" />
+            <MudCardContent>
+                <MudText Typo="Typo.h5">Suraj Dixit</MudText>
+                <MudText Typo="Typo.body2">Support Escalation Engineer</MudText>
+                <MudText Typo="Typo.body2">FDR Cases: 3</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem>
+        <MudCard>
+            <MudCardMedia Image="images/suraj.jpg" Height="200" />
+            <MudCardContent>
+                <MudText Typo="Typo.h5">Suraj Dixit</MudText>
+                <MudText Typo="Typo.body2">Support Escalation Engineer</MudText>
+                <MudText Typo="Typo.body2">FDR Cases: 3</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem>
+       <MudCard>
+            <MudCardMedia Image="images/suraj.jpg" Height="200" />
+            <MudCardContent>
+                <MudText Typo="Typo.h5">Suraj Dixit</MudText>
+                <MudText Typo="Typo.body2">Support Escalation Engineer</MudText>
+                <MudText Typo="Typo.body2">FDR Cases: 3</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>*@
+
+<br />
+
+@if (fdrapprovedcount == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="4">
+            <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@dataApproved" InputLabels="@labelsApproved">
+	            <CustomGraphics>
+		            <text class="donut-inner-text" x="47%" y="40%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Calibri" font-size="2">Approved FDR Cases</text>
+		            <text class="donut-inner-text" x="47%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Calibri" font-size="5">@dataApproved.Sum().ToString()</text>
+	            </CustomGraphics>
+            </MudChart>
+        </MudItem>
+        <MudItem xs="8">
+            <MudTable Bordered="true" Striped="true" Outlined="true" Dense="true" Items="fdrapprovedcount" Hover="true" Elevation="0">
+                <HeaderContent>
+                    <MudTh Style="text-align: center;">Position</MudTh>
+                    <MudTh Style="text-align: center;">Engineer</MudTh>
+                    <MudTh Style="text-align: center;">Approved FDR Cases</MudTh>
+            
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd Style="text-align: center;" DataLabel="Position">@context.Position</MudTd>
+                    <MudTd Style="padding-left: 10%;" DataLabel="Engineer"><MudIconButton Icon="@Icons.Filled.AccountCircle" Color="Color.Inherit" Target="_blank" />@context.Engineer</MudTd>
+                    <MudTd Style="text-align: center;" DataLabel="FDR Cases">@context.CaseCount</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudItem>
+    </MudGrid>
+
+}
+
+<br />
+<br />
+<br />
+<MudAlert Icon="@Icons.Custom.Uncategorized.ColorPalette" ContentAlignment="HorizontalAlignment.Center"  Severity="Severity.Normal">Total Submitted Cases Per Engineer</MudAlert>
+<br />
+@*Variant="Variant.Filled"*@
+<br />
+
+@if (fdrtotalcount == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="4">
+            <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@dataTotal" InputLabels="@labelsTotal">
+	            <CustomGraphics>
+		            <text class="donut-inner-text" x="47%" y="40%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Calibri" font-size="2">Total Submitted Cases</text>
+		            <text class="donut-inner-text" x="47%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Calibri" font-size="5">@dataTotal.Sum().ToString()</text>
+	            </CustomGraphics>
+            </MudChart>
+        </MudItem>
+        <MudItem xs="8">
+            <MudTable RowsPerPage="5" Bordered="true" Striped="true" Outlined="true" Dense="true" Items="fdrtotalcount" Hover="true" Elevation="0">
+                <HeaderContent>
+                    <MudTh Style="text-align: center;">Position</MudTh>
+                    <MudTh Style="text-align: center;">Engineer</MudTh>
+                    <MudTh Style="text-align: center;">Total Submitted Cases</MudTh>
+            
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd Style="text-align: center;" DataLabel="Position">@context.Position</MudTd>
+                    <MudTd Style="padding-left: 10%;" DataLabel="Engineer"><MudIconButton Icon="@Icons.Filled.AccountCircle" Color="Color.Inherit" Target="_blank" />@context.Engineer</MudTd>
+                    <MudTd Style="text-align: center;" DataLabel="FDR Cases">@context.CaseCount</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager HideRowsPerPage="true" />
+                </PagerContent>
+            </MudTable>
+        </MudItem>
+    </MudGrid>
+
+}
+
+
+@code {
+
+    private int index = -1; //default value cannot be 0 -> first selectedindex is 0.
+    double[] dataApproved = { };
+    string[] labelsApproved = { };
+    double[] dataTotal = { };
+    string[] labelsTotal = { };
+    private bool hidePageNumber;
+    private bool hidePagination;
+    private bool hideRowsPerPage;
+
+    private FdrCount[] fdrapprovedcount;
+    private FdrCount[] fdrtotalcount;
+    //private FdrCount fdr;
+    public int i = 0, j = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        fdrapprovedcount = await fdrcaseservice.GetCountOfApprovedCasesPerEngineer();
+        fdrtotalcount = await fdrcaseservice.GetCountOfTotalCasesPerEngineer();
+        dataApproved = new double[fdrapprovedcount.Length];
+        labelsApproved = new String[fdrapprovedcount.Length];
+        foreach(FdrCount fdr in fdrapprovedcount)
+        {
+            dataApproved[j] = Convert.ToDouble(fdr.CaseCount);
+            labelsApproved[j] = fdr.Engineer;
+            j++;
+        }
+
+        dataTotal = new double[fdrtotalcount.Length];
+        labelsTotal = new String[fdrtotalcount.Length];
+        foreach(FdrCount fdr in fdrtotalcount)
+        {
+            dataTotal[i] = Convert.ToDouble(fdr.CaseCount);
+            labelsTotal[i] = fdr.Engineer;
+            i++;
+        }
+    }
+}

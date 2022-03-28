@@ -1,0 +1,37 @@
+﻿@page "/rules"
+
+<PageTitle>Rules</PageTitle>
+
+<MudAlert Icon="@Icons.Filled.RuleFolder" ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Normal">Rules</MudAlert>
+
+<br> 
+
+<MudText><MudIconButton Icon="@Icons.Filled.QuestionAnswer" Color="Color.Inherit" Target="_blank" />Which Cases are Eligible?</MudText>
+
+        <MudListItem Icon="@Icons.Material.Filled.Send">
+            <MudText>All the cases where solution is delivered on the First Day</MudText>
+        </MudListItem>
+        
+        <MudListItem Icon="@Icons.Material.Filled.Send">
+            <MudText>The cases may not necessarily be closed on the First Day. We can take time to follow up and close</MudText>
+        </MudListItem>
+
+
+<MudText><MudIconButton Icon="@Icons.Filled.QuestionAnswer" Color="Color.Inherit" Target="_blank" />Which Cases are Eligible?</MudText>
+
+<MudListItem Icon="@Icons.Material.Filled.Send">
+            <MudText >Which Cases are Eligible?</MudText>
+        </MudListItem>
+
+What if a customer doesn’t respond on the First day? 
+
+Don’t worry, our timer starts only when  you start your troubleshooting with cx
+
+
+
+
+All the Best!
+
+GOT QUESTIONS OR PROBLEMS WITH THE PORTAL?
+Feel free to reach out to sudixi/pahurkat
+

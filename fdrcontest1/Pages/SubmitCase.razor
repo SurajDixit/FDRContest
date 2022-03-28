@@ -1,0 +1,168 @@
+﻿@page "/submitcase"
+@using fdrcontest1.Data
+@inject WeatherForecastService ForecastService
+@inject FdrCaseService fdrcaseservice
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@inject AuthenticationStateProvider authProvider
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.Data.SqlClient
+
+<PageTitle>Submit a FDR Case</PageTitle>
+
+<MudAlert ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Normal" >Submit a FDR case</MudAlert>
+
+<br />
+@if (displayProgress == true)
+{
+    <MudProgressLinear Align="center" Color="Color.Default" Indeterminate="true" />
+}
+@if (showSuccess == true)
+{
+    <MudText Align="Align.Center" Typo="Typo.h5">Added case @caseNum successfully!</MudText>
+}
+<br /> 
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+<DataAnnotationsValidator/>
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12" sm="7">
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Name" Disabled
+                              @bind-Value="@userId" For="@(() => model.Username)"/>
+                <MudTextField Label="Email" Disabled Class="mt-3"
+                              @bind-Value="@email" For="@(() => model.Email)"/>
+                <MudTextField Label="Case Number" HelperText="Max. 50 characters" Class="mt-3"
+                              @bind-Value="model.CaseNumber" For="@(() => model.CaseNumber)" InputType="InputType.Text"/>
+                <MudTextField Label="Additional Comments" HelperText="Max. 200 characters" Class="mt-3"
+                              @bind-Value="model.Description" For="@(() => model.Description)" InputType="InputType.Text"/>
+            </MudCardContent>
+            
+            <MudCardActions>
+                
+                <MudButton ButtonType="ButtonType.Submit" Color="Color.Dark" Class="mx-auto">Submit</MudButton>
+                
+                
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    
+
+</MudGrid>
+</EditForm>
+
+<br> 
+
+
+
+@if (fdrcase == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    if(fdrcase.Length != 0){
+        <MudAlert Icon="@Icons.Filled.VerifiedUser" ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Normal">Cases submitted by @userId</MudAlert>
+    
+        <br>
+    
+        <MudTable Items="fdrcase" Hover="true" Elevation="0">
+            <HeaderContent>
+                <MudTh>Engineer</MudTh>
+                <MudTh>Email</MudTh>
+                <MudTh>Case Number</MudTh>
+                <MudTh>Comments</MudTh>
+                <MudTh>Submitted On</MudTh>
+                <MudTh>Approved as FDR</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Engineer">@context.Engineer</MudTd>
+                <MudTd DataLabel="Email">@context.Email</MudTd>
+                <MudTd DataLabel="Case Number">@context.CaseNumber </MudTd>
+                <MudTd DataLabel="Comments ">@context.Description </MudTd>
+                <MudTd DataLabel="Submitted On">@context.DateTime </MudTd>
+                <MudTd DataLabel="Approved as FDR">@context.IsFDR</MudTd>
+            </RowTemplate>
+        
+        </MudTable>
+    }
+}
+
+
+@*@code {
+    private WeatherForecast[] forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+}*@
+
+
+@code {
+
+    AuthenticationState authState;
+    private WeatherForecast[] forecasts;
+    private FdrCase[] fdrcase;
+    private string userId;
+    private string email;
+    private string caseNum;
+    bool displayProgress = false;
+    bool showSuccess = false;
+    RegisterForm model = new RegisterForm();
+    bool success;
+
+    public class RegisterForm
+    {
+
+        [StringLength(50, ErrorMessage = "Name length can't be more than 50.")]
+        public string Username { get; set; }
+
+        
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "Case Number must be at least 16 characters long.", MinimumLength = 16)]
+        public string CaseNumber { get; set; }
+
+        [Required]
+        [StringLength(100, MinimumLength = 0)]
+        public string Description { get; set; }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        authState = await authProvider.GetAuthenticationStateAsync();
+        userId = authState.User.Claims.FirstOrDefault(c => c.Type == "name").Value;
+        email = authState.User.Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
+        fdrcase = await fdrcaseservice.GetEngineerDataAsync(email);
+    }
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        showSuccess = false;
+        displayProgress = true;
+        await Task.Delay(1);
+        model.Username = userId;
+        model.Email = email;
+        caseNum = model.CaseNumber;
+        success = true;
+        StateHasChanged();
+        String commandText = "insert into dbo.fdrcontesttable (engineer, casenumber, description, email, isFDR, submittedon) values ('" + @model.Username + "', '" + @model.CaseNumber + "', '" + @model.Description + "','" + @model.Email + "','In Review','" + @DateTime.Now + "')";
+        using (SqlConnection connection = new SqlConnection("Server=tcp:fdrcontest.database.windows.net,1433;Initial Catalog=FDRContestDB;Persist Security Info=False;User ID=surajadmin;Password='Passw0rd!';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
+        {
+            SqlCommand command = new SqlCommand(commandText, connection);
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+        }
+        model = new RegisterForm();
+        displayProgress = false;
+        showSuccess = true;
+        fdrcase = await fdrcaseservice.GetEngineerDataAsync(email);
+        StateHasChanged();
+    }
+}
+

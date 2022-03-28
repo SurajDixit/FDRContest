@@ -1,0 +1,35 @@
+﻿@page "/rules"
+
+<PageTitle>Rules</PageTitle>
+
+<MudAlert Icon="@Icons.Filled.RuleFolder" ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Normal">Rules</MudAlert>
+
+<br> 
+
+<MudPaper>
+
+    <MudText><MudIconButton Icon="@Icons.Filled.QuestionAnswer" Color="Color.Inherit" Target="_blank" />Which Cases are Eligible?</MudText>
+
+            <MudListItem Style="padding-left: 5%;" Icon="@Icons.Material.Filled.Send">
+                <MudText>All the cases where solution is delivered on the First Day</MudText>
+            </MudListItem>
+        
+            <MudListItem Style="padding-left: 5%;" Icon="@Icons.Material.Filled.Send">
+                <MudText>The cases may not necessarily be closed on the First Day. We can take time to follow up and close</MudText>
+            </MudListItem>
+
+
+    <MudText><MudIconButton Icon="@Icons.Filled.QuestionAnswer" Color="Color.Inherit" Target="_blank" />What if a customer doesn’t respond on the First day? 
+    </MudText>
+
+            <MudListItem Style="padding-left: 5%;" Icon="@Icons.Material.Filled.Send">
+                <MudText >Don’t worry, our timer starts only when  you start your troubleshooting with cx</MudText>
+            </MudListItem>
+
+
+            <br />
+
+    <MudText><MudIconButton Icon="@Icons.Filled.ReportProblem" Color="Color.Inherit" Target="_blank" />GOT QUESTIONS OR PROBLEMS WITH THE PORTAL?</MudText>
+    <MudText Style="padding-left: 4%;"> <MudIconButton Icon="@Icons.Filled.FollowTheSigns" Color="Color.Inherit" Target="_blank" />Feel free to reach out to <a style="text-decoration: underline;" href="mailto:sudixi@microsoft.com">sudixi</a>/<a style="text-decoration: underline;" href="mailto:pahurkat@microsoft.com">pahurkat</a></MudText>
+
+</MudPaper>

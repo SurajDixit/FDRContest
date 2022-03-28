@@ -1,0 +1,147 @@
+﻿@page "/admin/review"
+@using fdrcontest1.Data
+@inject WeatherForecastService ForecastService
+@inject FdrCaseService fdrcaseservice
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@inject AuthenticationStateProvider authProvider
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.Data.SqlClient
+
+<PageTitle>Admin</PageTitle>
+
+@if (!(email == "pahurkat@microsoft.com" || email == "sudixi@microsoft.com" || email == "jaws@microsoft.com" || email == "roso@microsoft.com" || email == "mechakr@microsoft.com"))
+{
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">You are not authorized to review cases!</MudAlert>
+}
+
+else{
+
+    <MudAlert Icon="@Icons.Filled.VerifiedUser" ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Normal">All Cases Submitted for review</MudAlert>
+    <br /> 
+    @if (displayProgress == true)
+    {
+        <MudProgressLinear Align="center" Color="Color.Default" Indeterminate="true" />
+    }
+    @if (showSuccess == true)
+    {
+        <MudText Align="Align.Center">@Status case @caseNum successfully!</MudText>
+    }
+    
+    @if (fdrcase == null)
+    {
+        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+    }
+    else
+    {
+        if(fdrcase.Length!= 0){
+    
+            <br>
+            
+                <MudTable RowsPerPage="5" Dense="true" FixedHeader="true" Height="410px" Items="fdrcase" Hover="true" Elevation="0">
+                    <HeaderContent>
+                        <MudTh>Engineer</MudTh>
+                        <MudTh>Email</MudTh>
+                        <MudTh>Case Number</MudTh>
+                        <MudTh>Comments</MudTh>
+                        <MudTh>Submitted On</MudTh>
+                        <MudTh>Status</MudTh>
+                        <MudTh>Approve/Reject</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Engineer">@context.Engineer</MudTd>
+                        <MudTd DataLabel="Email">@context.Email</MudTd>
+                        <MudTd DataLabel="Case Number"><a style="text-decoration: underline;" href="mscb:case?@context.CaseNumber">@context.CaseNumber</a></MudTd>
+                        <MudTd DataLabel="Comments ">@context.Description </MudTd>
+                        <MudTd DataLabel="Submitted On">@context.DateTime </MudTd>
+                        <MudTd DataLabel="Status">@context.IsFDR</MudTd>
+                        <MudTd DataLabel="Decision">
+                            <MudSelect SelectedValuesChanged="UpdateStatus" T="string" Label="Decision" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Approved "+ @context.CaseNumber.Trim(' '))"/>
+                                <MudSelectItem T="string" Value="@("Rejected "+ @context.CaseNumber.Trim(' '))"/>
+                            </MudSelect>
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                    <MudTablePager HideRowsPerPage="true" />
+                    </PagerContent>
+                </MudTable>
+          
+        }
+        else
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">No cases have been submitted!</MudAlert>
+        }
+
+        
+    }
+}
+
+@code {
+
+    AuthenticationState authState;
+    private FdrCase[] fdrcase;
+    private string userId;
+    private string email;
+    private string caseNum;
+    private string Status;
+    bool displayProgress = false;
+    bool showSuccess = false;    
+
+    private async void UpdateStatus(IEnumerable<String> value1)
+    {
+        showSuccess = false;
+        displayProgress = true;
+        await Task.Delay(1);
+        string[] subs = value1.First().Split(' ');
+        Status = subs[0];
+        caseNum = subs[1];
+        StateHasChanged();
+        String commandText = "UPDATE dbo.fdrcontesttable SET isFDR='" + subs[0] + "' WHERE casenumber='" + subs[1] + "'";
+        using (SqlConnection connection = new SqlConnection("Server=tcp:fdrcontest.database.windows.net,1433;Initial Catalog=FDRContestDB;Persist Security Info=False;User ID=surajadmin;Password='Passw0rd!';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
+        {
+            SqlCommand command = new SqlCommand(commandText, connection);
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+        }
+        displayProgress = false;
+        showSuccess = true;
+        fdrcase = await fdrcaseservice.GetAllEngineerDataAsync();
+        StateHasChanged();
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await authProvider.GetAuthenticationStateAsync();
+        userId = authState.User.Claims.FirstOrDefault(c => c.Type == "name").Value;
+        email = authState.User.Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
+        fdrcase = await fdrcaseservice.GetAllEngineerDataAsync();
+    }
+
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        //showSuccess = false;
+        //displayProgress = true;
+        //await Task.Delay(1);
+        //model.Username = userId;
+        //model.Email = email;
+        //caseNum = model.CaseNumber;
+        //success = true;
+        //StateHasChanged();
+        //String commandText = "insert into dbo.fdrcontesttable (engineer, casenumber, description, email, isFDR, submittedon) values ('" + @model.Username + "', '" + @model.CaseNumber + "', '" + @model.Description + "','" + @model.Email + "','In Review','" + @DateTime.Now + "')";
+        //using (SqlConnection connection = new SqlConnection("Server=tcp:fdrcontest.database.windows.net,1433;Initial Catalog=FDRContestDB;Persist Security Info=False;User ID=surajadmin;Password='Passw0rd!';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
+        //{
+        //    SqlCommand command = new SqlCommand(commandText, connection);
+        //    command.Connection.Open();
+        //    command.ExecuteNonQuery();
+        //}
+        //model = new RegisterForm();
+        //displayProgress = false;
+        //showSuccess = true;
+        //fdrcase = await fdrcaseservice.GetEngineerDataAsync(email);
+        //StateHasChanged();
+    }
+}
+

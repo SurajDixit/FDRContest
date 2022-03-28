@@ -1,0 +1,27 @@
+﻿@inject AuthenticationStateProvider authProvider
+
+<AuthorizeView>
+    <Authorized>
+        Hello, @userId!
+        &nbsp;
+        <MudIconButton Icon="@Icons.Material.Outlined.Login" Color="Color.Inherit" href="MicrosoftIdentity/Account/SignOut"></MudIconButton>
+        <a style="color: white;" href="MicrosoftIdentity/Account/SignOut">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    AuthenticationState authState;
+    private string userId;
+    private string email;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await authProvider.GetAuthenticationStateAsync();
+        userId = authState.User.Claims.FirstOrDefault(c => c.Type == "name").Value;
+        email = authState.User.Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
+
+    }
+}

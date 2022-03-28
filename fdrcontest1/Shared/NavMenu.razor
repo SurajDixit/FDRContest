@@ -1,0 +1,27 @@
+﻿@inject AuthenticationStateProvider authProvider
+
+
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Filled.Dashboard">Dashboard</MudNavLink>
+    <MudNavLink Href="/rules" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.Rule">Rules</MudNavLink>
+    <MudNavLink Href="/submitcase" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Submit FDR Case</MudNavLink>
+    @if(email == "pahurkat@microsoft.com" || email == "sudixi@microsoft.com" || email == "jaws@microsoft.com" || email == "roso@microsoft.com" || email == "mechakr@microsoft.com")
+    {
+        <MudNavLink Href="/admin/review" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.AdminPanelSettings">Admin Review</MudNavLink>
+    }
+</MudNavMenu>
+
+
+@code{
+
+    AuthenticationState authState;
+    private string userId;
+    private string email;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await authProvider.GetAuthenticationStateAsync();
+        userId = authState.User.Claims.FirstOrDefault(c => c.Type == "name").Value;
+        email = authState.User.Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
+    }
+}
